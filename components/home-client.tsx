@@ -34,6 +34,7 @@ interface HomeClientProps {
 export default function HomeClient({ session, initialPublicGames, initialUserGames }: HomeClientProps) {
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
+  const [promptError, setPromptError] = useState("");
   const [generatedGame, setGeneratedGame] = useState<
     { id: string; htmlContent: string; title: string } | null
   >(null);
@@ -57,7 +58,11 @@ export default function HomeClient({ session, initialPublicGames, initialUserGam
 
 
   const handleGenerate = async () => {
-    if (!prompt.trim()) return;
+    if (!prompt.trim()) {
+      setPromptError("请输入游戏描述");
+      return;
+    }
+    setPromptError("");
     setLoading(true);
     abortRef.current?.abort();
     const controller = new AbortController();
@@ -144,10 +149,17 @@ export default function HomeClient({ session, initialPublicGames, initialUserGam
             <Textarea
               placeholder="Describe your game idea..."
               value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
+              onChange={(e) => {
+                setPrompt(e.target.value);
+                if (promptError) setPromptError("");
+              }}
               className="min-h-[120px]"
               disabled={loading}
             />
+            {promptError && (
+              <div className="text-sm text-destructive">{promptError}</div>
+            )}
+
             <div className="flex justify-between items-center">
               <div className="text-sm text-muted-foreground">
                 {session ? (
