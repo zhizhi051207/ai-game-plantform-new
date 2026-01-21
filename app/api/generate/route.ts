@@ -83,7 +83,7 @@ Keep everything self-contained.`,
         },
       ],
       temperature: 0.7,
-      max_tokens: 4096,
+      max_tokens: 8192,
     } as any);
 
     let htmlContent = completion.choices[0].message.content;
@@ -121,7 +121,7 @@ Keep everything self-contained.`,
     });
   } catch (error: any) {
     console.error("Game generation error:", error);
-    
+
     // 提供更详细的错误信息
     let errorMessage = "Failed to generate game";
     if (error.code === 403) {
@@ -132,11 +132,12 @@ Keep everything self-contained.`,
       errorMessage = "Model configuration error. Please check if OpenAI GPT-5.1-Codex-Mini (openai/gpt-5.1-codex-mini) is available on OpenRouter.";
     }
 
+
     return NextResponse.json(
-      { 
-        error: errorMessage, 
+      {
+        error: errorMessage,
         details: error.message || String(error),
-        code: error.code
+        code: error.code,
       },
       { status: 500 }
     );
