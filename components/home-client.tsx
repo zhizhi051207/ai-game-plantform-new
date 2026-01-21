@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, Gamepad2, Sparkles } from "lucide-react";
 import Link from "next/link";
+import GameIframe from "@/components/game-iframe";
 
 interface Game {
   id: string;
@@ -235,12 +236,10 @@ export default function HomeClient({ session, initialPublicGames, initialUserGam
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="border rounded-lg overflow-hidden">
-              <iframe
-                srcDoc={generatedGame.htmlContent}
+              <GameIframe
+                html={generatedGame.htmlContent}
                 title={generatedGame.title}
-                className="w-full h-[500px] border-0"
-                sandbox="allow-scripts allow-same-origin allow-pointer-lock allow-popups allow-forms allow-popups-to-escape-sandbox"
-                allow="gamepad; fullscreen; microphone; camera; autoplay; clipboard-write; encrypted-media; picture-in-picture"
+                minHeight={360}
               />
             </div>
             <div className="flex gap-4">

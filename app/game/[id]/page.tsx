@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Gamepad2, Globe, Calendar, User } from "lucide-react";
 import Link from "next/link";
+import GameIframe from "@/components/game-iframe";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -67,12 +68,10 @@ export default async function GamePage({ params }: PageProps) {
           </CardHeader>
           <CardContent>
             <div className="border rounded-lg overflow-hidden">
-              <iframe
-                srcDoc={game.htmlContent}
+              <GameIframe
+                html={game.htmlContent}
                 title={game.title}
-                className="w-full h-[500px] border-0"
-                sandbox="allow-scripts allow-same-origin allow-pointer-lock allow-popups allow-forms allow-popups-to-escape-sandbox"
-                 allow="gamepad; fullscreen; microphone; camera; autoplay; clipboard-write; encrypted-media; picture-in-picture"
+                minHeight={360}
               />
             </div>
             <div className="mt-4 text-sm text-muted-foreground">
