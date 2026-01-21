@@ -66,17 +66,20 @@ export async function POST(request: NextRequest) {
       messages: [
         {
           role: "system",
-          content: `You are a game developer AI that creates simple, self-contained HTML5 games. Generate a complete HTML file with embedded CSS and JavaScript that implements the described game. The game should be playable directly in a browser, with no external dependencies. Include a canvas or DOM-based game with clear controls and instructions. Keep the code concise and well-commented. Respond with ONLY the HTML code, no explanations.`,
+          content: `You are a game developer AI that creates polished, self-contained HTML5 games. Generate a complete HTML file with embedded CSS and JavaScript that implements the described game. The game should be playable directly in a browser, with no external dependencies. REQUIREMENTS:\n- Visual quality: modern UI, pleasing color palette, soft shadows, rounded corners, gradients, and subtle animations.\n- Layout: a centered game container with header/title, instruction panel, status/score HUD, and a clear play area.\n- Typography: choose a clean font stack and consistent spacing.\n- Feedback: hover/pressed states, game-over/win banner or toast.\n- Responsiveness: mobile-friendly, full width on small screens, scalable canvas or responsive grid.\n- Performance: lightweight, avoid heavy computations.\nRespond with ONLY the HTML code, no explanations.`,
         },
         {
           role: "user",
-          content: `Create a simple game: ${prompt}. The HTML file should include:
+          content: `Create a polished game: ${prompt}. The HTML file should include:
 1. A canvas or DOM elements for the game
-2. Embedded CSS for styling
+2. Embedded CSS for modern styling (gradients, shadows, rounded corners)
 3. Embedded JavaScript for game logic
 4. Clear instructions on how to play
-5. A score display if applicable
-6. Responsive design that works on desktop and mobile`,
+5. A score/time/status display
+6. Responsive design that works on desktop and mobile
+7. Game states (start, playing, game over) with visual feedback
+8. Sound effects if possible using Web Audio (no external assets)
+Keep everything self-contained.`,
         },
       ],
       temperature: 0.7,
