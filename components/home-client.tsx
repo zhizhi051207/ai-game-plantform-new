@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { Session } from "next-auth";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -38,16 +39,37 @@ export default function HomeClient({ session, initialPublicGames, initialUserGam
   >(null);
   const [publicGames, setPublicGames] = useState<Game[]>(initialPublicGames);
   const [userGames, setUserGames] = useState<Game[]>(initialUserGames);
+  const pathname = usePathname();
+  const abortRef = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    if (pathname === "/") {
+      setLoading(false);
+    }
+  }, [pathname]);
+
+  useEffect(() => {
+    return () => {
+      abortRef.current?.abort();
+    };
+  }, []);
+
+
 
   const handleGenerate = async () => {
     if (!prompt.trim()) return;
     setLoading(true);
+    abortRef.current?.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
     try {
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt }),
+        signal: controller.signal,
       });
+
       const data = await response.json();
       if (data.success) {
         setGeneratedGame({
@@ -72,10 +94,14 @@ export default function HomeClient({ session, initialPublicGames, initialUserGam
       } else {
         alert("Failed to generate game: " + data.error);
       }
-    } catch (error) {
+    } catch (error: any) {
+      if (error?.name === "AbortError") {
+        return;
+      }
       console.error(error);
       alert("Error generating game");
     } finally {
+      abortRef.current = null;
       setLoading(false);
     }
   };
