@@ -1,4 +1,6 @@
 import { notFound } from "next/navigation";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth-options";
 import { getGame } from "@/lib/db";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,12 +17,19 @@ interface PageProps {
 }
 
 export default async function GamePage({ params }: PageProps) {
+  const session = await getServerSession(authOptions);
+
   const { id } = await params;
   const game = await getGame(id);
 
   if (!game) {
     notFound();
   }
+
+  const isOwner =
+    (session?.user?.id && game.userId === session.user.id) ||
+    game.user?.email === session?.user?.email;
+
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -81,7 +90,6 @@ export default async function GamePage({ params }: PageProps) {
             </div>
           </CardContent>
         </Card>
-
         <div className="space-y-6">
           <Card>
             <CardHeader>
@@ -108,6 +116,11 @@ export default async function GamePage({ params }: PageProps) {
               <CardTitle>Actions</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
+              {isOwner && (
+                <Button className="w-full" asChild>
+                  <Link href={`/game/${game.id}/edit`}>Edit This Game</Link>
+                </Button>
+              )}
               <Button className="w-full" asChild>
                 <a href={`data:text/html;charset=utf-8,${encodeURIComponent(game.htmlContent)}`} download={`${game.title.replace(/\s+/g, '_')}.html`}>
                   Download HTML
