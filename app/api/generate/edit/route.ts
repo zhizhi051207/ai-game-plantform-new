@@ -100,7 +100,7 @@ export async function POST(request: NextRequest) {
             {
               role: "system",
               content:
-                "You are a game developer AI. You will edit an existing HTML5 game. Apply the user's instructions to the provided HTML and return a full, self-contained HTML document. Preserve gameplay and interactivity. The result MUST be playable (not just a static preview). Keep all essential logic, input handlers, and render/update loops unless explicitly replaced. Return ONLY HTML code.",
+                "You are a game developer AI. You will edit an existing HTML5 game. Apply the user's instructions to the provided HTML and return a full, self-contained HTML document. Prefer Tailwind CSS via CDN and DaisyUI for UI components, and use GSAP for animations; if you choose a React-based UI, you may use Framer Motion (include React/ReactDOM + Framer Motion UMD). External dependencies are allowed ONLY for Tailwind CDN, DaisyUI CSS, GSAP, and optionally React/Framer Motion. Preserve gameplay and interactivity. The result MUST be playable (not just a static preview). Keep all essential logic, input handlers, and render/update loops unless explicitly replaced. Return ONLY HTML code.",
             },
             {
               role: "user",
