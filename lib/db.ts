@@ -95,6 +95,23 @@ export async function getPublicGames(limit = 20) {
   });
 }
 
+export async function getPublicGamesPage(limit = 20, offset = 0) {
+  const [games, total] = await Promise.all([
+    prisma.game.findMany({
+      where: { isPublic: true },
+      orderBy: { createdAt: "desc" },
+      take: limit,
+      skip: offset,
+      include: {
+        user: { select: { name: true, email: true } },
+      },
+    }),
+    prisma.game.count({ where: { isPublic: true } }),
+  ]);
+
+  return { games, total };
+}
+
 export async function getUserGames(userIdOrEmail: string) {
   const userId = await resolveUserId(userIdOrEmail);
   if (!userId) return [];

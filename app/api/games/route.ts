@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getPublicGames, getUserGames } from "@/lib/db";
+import { getPublicGames, getPublicGamesPage, getUserGames } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
 
@@ -13,8 +13,9 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get("limit") || "20");
 
     if (type === "public") {
-      const games = await getPublicGames(limit);
-      return NextResponse.json({ success: true, games });
+      const offset = parseInt(searchParams.get("offset") || "0");
+      const { games, total } = await getPublicGamesPage(limit, offset);
+      return NextResponse.json({ success: true, games, total });
     } else if (type === "user") {
       const session = await getServerSession(authOptions);
       if (!session?.user?.email) {
