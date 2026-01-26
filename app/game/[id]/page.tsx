@@ -44,9 +44,9 @@ export default async function GamePage({ params }: PageProps) {
     <div className="max-w-6xl mx-auto">
       <div className="mb-6">
         <Button variant="ghost" asChild className="mb-4">
-          <Link href="/">
+          <Link href="/games">
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Home
+            Back to Public Games
           </Link>
         </Button>
         <div className="flex items-center justify-between">

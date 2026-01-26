@@ -1,8 +1,10 @@
 import { getPublicGames } from "@/lib/db";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Gamepad2, User, Calendar, Eye } from "lucide-react";
+import { Gamepad2, User, Calendar } from "lucide-react";
+import GameIframe from "@/components/game-iframe";
 import Link from "next/link";
+
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -39,19 +41,27 @@ export default async function PublicGamesPage() {
                 <CardTitle className="line-clamp-1">{game.title}</CardTitle>
                 <CardDescription className="line-clamp-2">{game.description || "AI-generated game"}</CardDescription>
               </CardHeader>
-              <CardContent className="flex-grow">
-                <div className="space-y-2 text-sm">
-                  <div className="flex items-center gap-2">
-                    <User className="h-4 w-4 text-muted-foreground" />
+              <CardContent className="relative flex-grow pb-28">
+                <div className="absolute bottom-4 left-4">
+                  <div className="w-48 h-28 overflow-hidden rounded-md border bg-background shadow-sm">
+                    <GameIframe
+                      html={game.htmlContent}
+                      title={`${game.title} preview`}
+                      fixedWidth={520}
+                      fixedHeight={320}
+                      scale={0.3}
+                      className="pointer-events-none"
+                    />
+                  </div>
+                </div>
+                <div className="absolute bottom-4 right-4 text-xs text-muted-foreground space-y-1 text-right">
+                  <div className="flex items-center justify-end gap-2">
+                    <User className="h-3.5 w-3.5" />
                     <span>{game.user?.name || game.user?.email || "Anonymous"}</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Calendar className="h-4 w-4 text-muted-foreground" />
+                  <div className="flex items-center justify-end gap-2">
+                    <Calendar className="h-3.5 w-3.5" />
                     <span>{new Date(game.createdAt).toLocaleDateString()}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Eye className="h-4 w-4 text-muted-foreground" />
-                    <span>{game.isPublic ? "Public" : "Private"}</span>
                   </div>
                 </div>
               </CardContent>

@@ -196,15 +196,21 @@ export default function HomeClient({ session, initialPublicGames, initialUserGam
             <div className="space-y-3">
               {publicGames.length > 0 ? (
                 publicGames.slice(0, 3).map((game) => (
-                  <div key={game.id} className="p-3 border rounded-lg hover:bg-accent/50">
-                    <div className="font-medium">{game.title}</div>
-                    <div className="text-sm text-muted-foreground">
-                      {game.description || "AI-generated game"}
+                  <Link
+                    key={game.id}
+                    href={`/game/${game.id}`}
+                    className="block"
+                  >
+                    <div className="p-3 border rounded-lg hover:bg-accent/50 transition-colors">
+                      <div className="font-medium">{game.title}</div>
+                      <div className="text-sm text-muted-foreground">
+                        {game.description || "AI-generated game"}
+                      </div>
+                      <div className="text-xs text-muted-foreground mt-1">
+                        By {game.user?.name || "Anonymous"} • {formatDate(game.createdAt)}
+                      </div>
                     </div>
-                    <div className="text-xs text-muted-foreground mt-1">
-                      By {game.user?.name || "Anonymous"} • {formatDate(game.createdAt)}
-                    </div>
-                  </div>
+                  </Link>
                 ))
               ) : (
                 <div className="p-3 border rounded-lg text-center text-muted-foreground">
@@ -232,15 +238,21 @@ export default function HomeClient({ session, initialPublicGames, initialUserGam
               <div className="space-y-3">
                 {userGames.length > 0 ? (
                   userGames.slice(0, 3).map((game) => (
-                    <div key={game.id} className="p-3 border rounded-lg hover:bg-accent/50">
-                      <div className="font-medium">{game.title}</div>
-                      <div className="text-sm text-muted-foreground">
-                        {game.description || "AI-generated game"}
+                    <Link
+                      key={game.id}
+                      href={`/game/${game.id}`}
+                      className="block"
+                    >
+                      <div className="p-3 border rounded-lg hover:bg-accent/50 transition-colors">
+                        <div className="font-medium">{game.title}</div>
+                        <div className="text-sm text-muted-foreground">
+                          {game.description || "AI-generated game"}
+                        </div>
+                        <div className="text-xs text-muted-foreground mt-1">
+                          Created {formatDate(game.createdAt)}
+                        </div>
                       </div>
-                      <div className="text-xs text-muted-foreground mt-1">
-                        Created {formatDate(game.createdAt)}
-                      </div>
-                    </div>
+                    </Link>
                   ))
                 ) : (
                   <div className="text-center py-4">

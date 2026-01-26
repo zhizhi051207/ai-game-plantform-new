@@ -7,6 +7,9 @@ interface GameIframeProps {
   title: string;
   className?: string;
   minHeight?: number;
+  fixedHeight?: number;
+  fixedWidth?: number;
+  scale?: number;
 }
 
 export default function GameIframe({
@@ -14,12 +17,27 @@ export default function GameIframe({
   title,
   className,
   minHeight = 360,
+  fixedHeight,
+  fixedWidth,
+  scale,
 }: GameIframeProps) {
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
   useEffect(() => {
     const iframe = iframeRef.current;
     if (!iframe) return;
+
+    if (fixedHeight) {
+      iframe.style.height = `${fixedHeight}px`;
+    }
+
+    if (fixedWidth) {
+      iframe.style.width = `${fixedWidth}px`;
+    }
+
+    if (fixedHeight) {
+      return;
+    }
 
     let resizeObserver: ResizeObserver | null = null;
 
@@ -62,7 +80,7 @@ export default function GameIframe({
       if (resizeObserver) resizeObserver.disconnect();
       window.clearInterval(interval);
     };
-  }, [html, minHeight]);
+  }, [html, minHeight, fixedHeight, fixedWidth]);
 
   return (
     <iframe
@@ -72,7 +90,13 @@ export default function GameIframe({
       className={`w-full border-0 ${className || ""}`}
       sandbox="allow-scripts allow-same-origin allow-pointer-lock allow-popups allow-forms allow-popups-to-escape-sandbox"
       allow="gamepad; fullscreen; microphone; camera; autoplay; clipboard-write; encrypted-media; picture-in-picture"
-      style={{ minHeight }}
+      style={{
+        minHeight,
+        height: fixedHeight ? `${fixedHeight}px` : undefined,
+        width: fixedWidth ? `${fixedWidth}px` : undefined,
+        transform: scale ? `scale(${scale})` : undefined,
+        transformOrigin: scale ? "top left" : undefined,
+      }}
     />
   );
 }
