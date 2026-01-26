@@ -10,6 +10,7 @@ interface GameIframeProps {
   fixedHeight?: number;
   fixedWidth?: number;
   scale?: number;
+  onSizeChange?: (size: { width: number; height: number }) => void;
 }
 
 export default function GameIframe({
@@ -20,6 +21,7 @@ export default function GameIframe({
   fixedHeight,
   fixedWidth,
   scale,
+  onSizeChange,
 }: GameIframeProps) {
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
@@ -52,7 +54,11 @@ export default function GameIframe({
           htmlEl?.scrollHeight || 0,
           minHeight
         );
+        const nextWidth = Math.max(body?.scrollWidth || 0, htmlEl?.scrollWidth || 0);
         iframe.style.height = `${nextHeight}px`;
+        if (onSizeChange) {
+          onSizeChange({ width: nextWidth, height: nextHeight });
+        }
       } catch {
         // ignore cross-origin or access issues
       }
