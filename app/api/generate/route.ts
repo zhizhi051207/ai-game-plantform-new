@@ -83,20 +83,58 @@ export async function POST(request: NextRequest) {
         messages: [
           {
             role: "system",
-            content: `You are a game developer AI that creates polished, self-contained HTML5 games. Generate a complete HTML file with embedded CSS and JavaScript that implements the described game. Prefer Tailwind CSS (load via https://cdn.tailwindcss.com) for layout and styling. If you use Tailwind, avoid redundant custom CSS. REQUIREMENTS:\n- Visual quality: modern UI, pleasing color palette, soft shadows, rounded corners, gradients, and subtle animations.\n- Layout: a centered game container with header/title, instruction panel, status/score HUD, and a clear play area.\n- Typography: choose a clean font stack and consistent spacing.\n- Feedback: hover/pressed states, game-over/win banner or toast.\n- Responsiveness: mobile-friendly, full width on small screens, scalable canvas or responsive grid.\n- Performance: lightweight, avoid heavy computations.\nRespond with ONLY the HTML code, no explanations.`,
+            content: `请生成一个可完整运行的「单文件 HTML 小游戏」，必须满足以下条件：
+
+【硬性要求】
+1) 输出必须是一个完整、可直接运行的 HTML 文件（内嵌 CSS + JS）
+3) 输出内容只允许包含 HTML 代码本体：不要解释说明、不要 Markdown、不要 
+ 代码块
+4) 尽量多使用Tailwind CSS、GSAP、Framer Motion、DaisyUI 等开源库来简化代码
+
+【游戏类型与定位】
+5) 游戏要求：${prompt}
+6) 整体必须统一、有设计感（例如：可爱、卡通、极简、科技风等任一明确方向）
+7) UI 必须美观好看，具备良好的视觉层级、对比度与动效反馈，避免"纯功能界面"
+
+【视觉与动效设计（重点强化）】
+8) 所有核心界面元素必须具备“设计感”：
+   - 使用圆角、阴影、渐变、模糊（backdrop-filter）、发光等现代 UI 手法
+   - 重要 UI（分数、血量、Combo）需有视觉强调，而非普通文字
+9) 页面整体需具备“活着的感觉”：
+   - 背景可包含轻微动态（渐变流动、粒子、呼吸动画等）
+   - 元素进入 / 出现 / 消失需使用平滑动画（fade / scale / slide / spring）
+
+【核心互动体验（必须具备）】
+8) 击中反馈明确且有表现力：
+   - 命中目标时有粒子 / 缩放 / 震动 / 颜色变化等视觉反馈
+   - 分数以浮动文字或动画形式展示
+10) 目标或敌人必须具备"被互动感"：
+    - 被击中会有形变 / 状态变化 / 表情变化 / 动作反馈
+    - 不只是简单消失
+11) UI 与玩家操作之间必须有即时响应：
+    - 按钮 hover / 点击有动画反馈
+    - 数值、进度条变化必须平滑过渡
+
+【操作与玩法】
+12) 操作方式尽量直观：
+    - 鼠标点击或键盘触发核心动作
+    - 如引入移动（WASD / 方向键），必须保持轻量与易上手
+13) 目标或敌人至少包含 2–3 种不同类型：
+    - 不同分值 / 行为 / 风险
+    - 难度随时间或关卡递增
+
+【技术与性能】
+20) 桌面 Chrome 可流畅运行；画面自适应窗口；目标约 60fps
+21) 如果实现难度过高，优先级为：
+    可运行性 > 互动反馈 > 视觉复杂度 > 真实 3D 精度
+
+【输出格式】
+22) 最终只输出完整 HTML 源码（包含 <html>…</html>），不要输出任何解释文字
+`,
           },
           {
             role: "user",
-            content: `Create a polished game: ${prompt}. The HTML file should include:
-1. A canvas or DOM elements for the game
-2. Tailwind CSS classes for styling (use Tailwind CDN)
-3. Embedded JavaScript for game logic
-4. Clear instructions on how to play
-5. A score/time/status display
-6. Responsive design that works on desktop and mobile
-7. Game states (start, playing, game over) with visual feedback
-8. Sound effects if possible using Web Audio (no external assets)
-Keep everything self-contained except the Tailwind CDN.`,
+            content: `游戏需求：${prompt}`,
           },
         ],
         temperature: 0.7,
