@@ -130,6 +130,7 @@ export async function POST(request: NextRequest) {
 
 【输出格式】
 22) 最终只输出完整 HTML 源码（包含 <html>…</html>），不要输出任何解释文字
+23) 必须有restart game 按钮
 `,
           },
           {
