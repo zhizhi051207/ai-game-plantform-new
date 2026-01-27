@@ -3,10 +3,10 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
 import { getGame } from "@/lib/db";
 import { Button } from "@/components/ui/button";
+import PlayGameCard from "@/components/play-game-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Gamepad2, Globe, Calendar, User } from "lucide-react";
 import Link from "next/link";
-import GameIframe from "@/components/game-iframe";
 import GameActionsClient from "@/components/game-actions-client";
 
 
@@ -80,31 +80,11 @@ export default async function GamePage({ params }: PageProps) {
       </div>
 
       <div className="grid md:grid-cols-3 gap-8">
-        <Card className="md:col-span-2">
-          <CardHeader>
-            <CardTitle>Play Game</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="border rounded-lg overflow-hidden">
-              {htmlValid ? (
-                <GameIframe
-                  html={game.htmlContent}
-                  title={game.title}
-                  minHeight={360}
-                />
-              ) : (
-                <div className="p-6 text-sm text-destructive">
-                  当前版本的HTML不完整，无法渲染游戏。请点击右侧“Edit This Game”重新生成。
-                </div>
-              )}
-            </div>
-            <div className="mt-4 text-sm text-muted-foreground">
-              <p>
-                The game runs in an iframe with sandboxed security. If you encounter issues, try refreshing.
-              </p>
-            </div>
-          </CardContent>
-        </Card>
+        <PlayGameCard
+          htmlValid={htmlValid}
+          htmlContent={game.htmlContent}
+          title={game.title}
+        />
         <div className="space-y-6">
           <Card>
             <CardHeader>
